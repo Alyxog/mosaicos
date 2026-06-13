@@ -1,0 +1,10 @@
+*{box-sizing:border-box;}
+html,body{margin:0;height:100%;}
+body{
+  font-family:'Space Grotesk',system-ui,sans-serif;
+  color:#15151A;
+  background:#fff;
+  -webkit-font-smoothing:antialiased;
+}
+#app{height:100%;}
+@keyframes sc-pulse{0%,100%{opacity:1;}50%{opacity:0.42;}}

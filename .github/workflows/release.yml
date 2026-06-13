@@ -1,0 +1,61 @@
+name: Release
+
+# Push a version tag (e.g. v0.1.1) and this builds a universal macOS DMG
+# (Intel + Apple Silicon) and attaches it to the matching GitHub Release.
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # The repo pins Rust 1.87.0 via src-tauri/rust-toolchain.toml; install it
+      # with both macOS targets so we can produce a universal binary.
+      - name: Set up Rust toolchain + macOS targets
+        run: |
+          rustup toolchain install 1.87.0 --profile minimal \
+            --target aarch64-apple-darwin --target x86_64-apple-darwin
+
+      - name: Cache Rust build
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build universal app + DMG and publish to the release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "Mosaicos ${{ github.ref_name }}"
+          releaseBody: |
+            A native macOS app that rebuilds a source image as a mosaic of your own photos.
+            Universal build — runs on both Apple Silicon and Intel Macs.
+
+            ### Install
+            1. Download the **.dmg** below and open it.
+            2. Drag **Mosaicos** into your Applications folder.
+            3. This build isn't Apple-signed, so macOS quarantines it and may say *"Mosaicos is damaged."* It isn't — remove the quarantine flag once, in **Terminal**:
+               ```
+               xattr -dr com.apple.quarantine /Applications/Mosaicos.app
+               ```
+               Then open it normally.
+          releaseDraft: false
+          prerelease: false
+          args: --target universal-apple-darwin

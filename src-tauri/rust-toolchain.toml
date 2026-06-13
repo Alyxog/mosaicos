@@ -1,0 +1,7 @@
+# Pin rustc 1.87.0. The machine's Homebrew rustc (1.96) — and anything >=1.88 —
+# turns a `time` crate coherence warning into a hard error (E0119). 1.87 is the
+# highest stable below that line while still satisfying the icu/edition2024 deps.
+# Paired with pinned-down time 0.3.41 / plist 1.7.2 / serde_with 3.12 in Cargo.lock.
+[toolchain]
+channel = "1.87.0"
+profile = "minimal"

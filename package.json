@@ -1,0 +1,30 @@
+{
+  "name": "mosaicos",
+  "private": true,
+  "version": "0.1.2",
+  "type": "module",
+  "description": "Mosaicos — a macOS photo-mosaic studio.",
+  "scripts": {
+    "dev": "vite",
+    "build": "svelte-check --tsconfig ./tsconfig.json && vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@tauri-apps/cli": "^2.1.0",
+    "@tsconfig/svelte": "^5.0.4",
+    "playwright": "^1.60.0",
+    "svelte": "^5.16.0",
+    "svelte-check": "^4.1.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/plugin-dialog": "^2.0.1",
+    "@tauri-apps/plugin-fs": "^2.0.3",
+    "@tauri-apps/plugin-opener": "^2.2.5"
+  }
+}
